@@ -131,7 +131,7 @@ export async function callApi<
 
   // Manual token handling
   const userStore = useUserStore();
-  const accessToken = userStore.access_token;
+  const token = userStore.token;
 
   logger.info(`[${schema.name}]: Sending request to ${path}`);
   logger.info(`[${schema.name}]: Request-payload: ${JSON.stringify(convertedPayload)}`);
@@ -141,7 +141,7 @@ export async function callApi<
     {
       method: schema.method,
       headers: schema.token ? {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       } : {
         "Content-Type": "application/json",
