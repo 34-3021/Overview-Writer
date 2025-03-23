@@ -30,7 +30,6 @@ export interface APISchema<
   ResponseComposedType extends ResponseType<any>,
 > {
   name: string;
-  base: "AUTH" | "TREEHOLE";
   path: string;
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   token?: boolean;
@@ -104,10 +103,7 @@ export async function callApi<
   // get environment variables
   const runtimeConfig = useRuntimeConfig()
 
-  const URL_MAPPER = {
-    AUTH: runtimeConfig.public.authBase,
-    TREEHOLE: runtimeConfig.public.treeHoleBase
-  };
+  const basePath = runtimeConfig.public.httpBase
   // Check the request
 
   const parsedPayload = schema.requestSchema.safeParse(payload);
@@ -128,7 +124,7 @@ export async function callApi<
 
   const path = Object.entries(param).reduce((acc, [key, value]) => {
     return acc.replace(`:${key}:`, value);
-  }, URL_MAPPER[schema.base] + schema.path);
+  }, basePath + schema.path);
 
   // Send the request
   const urlParams = new URLSearchParams(convertedPayload as Record<string, string>);
