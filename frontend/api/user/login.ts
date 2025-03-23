@@ -6,15 +6,12 @@ const loginRequestSchema = z.object({
 });
 
 export const loginSuccessfulResponseSchema = z.object({
-    access: z.string(),
-    refresh: z.string(),
+    token: z.string(),
     message: z.string()
 });
 
 export const loginFailedResponseSchema = z.object({
-    code: z.number(),
     message: z.string(),
-    detail: z.array(z.any()).optional()
 });
 
 export const loginSchema = {

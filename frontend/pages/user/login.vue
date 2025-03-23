@@ -54,7 +54,7 @@ async function onSubmit(field: any) {
   if (type === "success") {
     loading.value = false;
     const userStore = useUserStore();
-    if (userStore.login(data.access, data.refresh)) {
+    if (userStore.login(data.token)) {
       router.push("/");
       toast.add({ title: "登录成功", color: "green" });
     } else {

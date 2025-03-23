@@ -1,23 +1,20 @@
 import { defineStore } from "pinia"
 
 export const useUserStore = defineStore('user', () => {
-    const access_token = ref("")
-    const refresh_token = ref("")
+    const token = ref("")
     const username = ref("")
-    const logined = computed(() => access_token.value != "" && refresh_token.value != "")
+    const logined = computed(() => token.value != "")
 
-    function login(access: string, refresh: string) {
-        if (access == "" || refresh == "") {
+    function login(token_: string) {
+        if (token_ == "") {
             return false;
         }
-        access_token.value = access;
-        refresh_token.value = refresh;
+        token.value = token_;
         return true;
     }
 
     function logout() {
-        access_token.value = ""
-        refresh_token.value = ""
+        token.value = ""
     }
 
     function setUsername(name: string) {
@@ -26,8 +23,7 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         // fields
-        access_token,
-        refresh_token,
+        token,
         username,
         logined,
 
