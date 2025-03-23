@@ -16,8 +16,7 @@ export const loginFailedResponseSchema = z.object({
 
 export const loginSchema = {
     name: 'login',
-    base: 'AUTH',
-    path: '/login',
+    path: '/auth/login',
     method: 'POST',
     token: false,
     requestSchema: loginRequestSchema,
