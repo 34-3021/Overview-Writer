@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
@@ -10,7 +11,9 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt'
+    '@pinia-plugin-persistedstate/nuxt',
+    '@nuxtjs/tailwindcss',
+    'motion-v/nuxt',
   ],
 
   pinia: {
@@ -47,4 +50,12 @@ export default defineNuxtConfig({
   },
   
   compatibilityDate: '2025-02-03',
+
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
+  },
+  
+  css: ['~/assets/css/main.css'],
 })

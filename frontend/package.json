@@ -10,8 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@inspira-ui/plugins": "^0.0.1",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
-    "nuxt": "^3.15.4"
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "nuxt": "^3.15.4",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
@@ -20,8 +25,11 @@
     "@nuxt/fonts": "^0.10.3",
     "@nuxt/image": "^1.9.0",
     "@nuxt/ui-pro": "^1.7.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
     "@pinia/nuxt": "^0.5.1",
-    "ajv": "^8.12.0",
+    "@tailwindcss/vite": "^4.0.15",
+    "@vueuse/core": "^13.0.0",
+    "motion-v": "^0.13.1",
     "n": "^9.2.1",
     "pinia": "^2.1.7",
     "zod": "^3.24.1"
