@@ -1,16 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  extends: ['@nuxt/ui-pro'],
   devtools: { enabled: true },
-
+  css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
     '@nuxt/fonts',
     '@nuxt/image',
     '@nuxt/ui',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt'
+    '@pinia-plugin-persistedstate/nuxt',
+    '@nuxt/ui-pro'
   ],
 
   pinia: {
