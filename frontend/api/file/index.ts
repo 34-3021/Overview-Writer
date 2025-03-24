@@ -37,7 +37,7 @@ export const updateFileRequestSchema = z.object({
 export const fileAPIs = {
   upload: {
     name: "uploadFile",
-    path: "/files/",
+    path: "/files",
     method: "POST",
     token: true,
     requestSchema: uploadRequestSchema,
@@ -55,7 +55,7 @@ export const fileAPIs = {
 
   list: {
     name: "listFiles",
-    path: "/files/",
+    path: "/files",
     method: "GET",
     token: true,
     requestSchema: listFilesRequestSchema,
@@ -73,7 +73,7 @@ export const fileAPIs = {
 
   get: {
     name: "getFile",
-    path: "/files/{file_id}",
+    path: "/files/:file_id:",
     method: "GET",
     token: true,
     requestSchema: z.object({}), // 无请求体
@@ -91,7 +91,7 @@ export const fileAPIs = {
 
   update: {
     name: "updateFile",
-    path: "/files/{file_id}",
+    path: "/files/:file_id:",
     method: "PUT",
     token: true,
     requestSchema: updateFileRequestSchema,
@@ -109,7 +109,7 @@ export const fileAPIs = {
 
   delete: {
     name: "deleteFile",
-    path: "/files/{file_id}",
+    path: "/files/:file_id:",
     method: "DELETE",
     token: true,
     requestSchema: z.object({}),

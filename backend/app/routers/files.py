@@ -14,7 +14,7 @@ router = APIRouter()
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@router.post("/files/", response_model=FileInDB)
+@router.post("/", response_model=FileInDB)
 async def upload_file(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
@@ -47,7 +47,7 @@ async def upload_file(
     
     return db_file
 
-@router.get("/files/", response_model=List[FileInDB])
+@router.get("/", response_model=List[FileInDB])
 def list_files(
     page: int = 1,
     per_page: int = 10,
@@ -60,7 +60,7 @@ def list_files(
         .limit(per_page)\
         .all()
 
-@router.get("/files/{file_id}", response_model=FileInDB)
+@router.get("/{file_id}", response_model=FileInDB)
 def get_file(
     file_id: int,
     db: Session = Depends(get_db),
@@ -75,7 +75,7 @@ def get_file(
         raise HTTPException(status_code=404, detail="File not found")
     return file
 
-@router.put("/files/{file_id}", response_model=FileInDB)
+@router.put("/{file_id}", response_model=FileInDB)
 def update_file(
     file_id: int,
     update_data: FileUpdate,
@@ -95,7 +95,7 @@ def update_file(
     db.refresh(db_file)
     return db_file
 
-@router.delete("/files/{file_id}")
+@router.delete("/{file_id}")
 def delete_file(
     file_id: int,
     db: Session = Depends(get_db),
