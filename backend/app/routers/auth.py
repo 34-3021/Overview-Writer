@@ -3,16 +3,9 @@ from sqlalchemy.orm import Session
 from models.user import User
 from schemas.auth import LoginRequest, LoginSuccessResponse, LoginFailedResponse
 from security import verify_password, create_access_token
-from database import SessionLocal
+from database import get_db
 
 router = APIRouter()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/login", 
     response_model=LoginSuccessResponse,

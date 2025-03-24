@@ -1,8 +1,9 @@
-from fastapi import FastAPI
-from routers import auth
+from fastapi import FastAPI, Depends
+from routers import auth, files
 from database import engine
 from models.user import User
 from fastapi.middleware.cors import CORSMiddleware
+from security import get_current_user
 
 User.metadata.create_all(bind=engine)
 
@@ -22,6 +23,13 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+
+app.include_router(
+    files.router,
+    prefix="/files",
+    tags=["Files"],
+    dependencies=[Depends(get_current_user)]
+)
 
 @app.get("/health")
 async def health_check():
