@@ -43,11 +43,26 @@ const router = useRouter();
 
 const toast = useToast();
 
+// 添加密码哈希函数
+async function hashPassword(password: string): Promise<string> {
+  // 使用Web Crypto API进行哈希
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  
+  // 将ArrayBuffer转换为十六进制字符串
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function onSubmit(field: any) {
   loading.value = true;
   errorMessage.value = "";
 
-  const { type, data } = await callApi(loginSchema, field);
+  const { type, data } = await callApi(loginSchema, {
+    ...field,
+    password: await hashPassword(field.password)
+  });
 
   console.log(type, data);
 
