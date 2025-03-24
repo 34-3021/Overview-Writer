@@ -15,10 +15,11 @@ def get_db():
         db.close()
 
 @router.post("/login", 
-            response_model=LoginSuccessResponse,
-            responses={
-                401: {"model": LoginFailedResponse},
-            })
+    response_model=LoginSuccessResponse,
+    responses={
+        401: { "model": LoginFailedResponse },
+    }
+)
 async def login(
     request: LoginRequest, 
     db: Session = Depends(get_db)
