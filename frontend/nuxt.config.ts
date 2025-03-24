@@ -47,21 +47,5 @@ export default defineNuxtConfig({
   },
   
   compatibilityDate: '2025-02-03',
-
-  // dir: {
-  //   app: 'app',
-  //   pages: 'pages',
-  //   layouts: 'layouts',
-  // },
-
-  // components: [
-  //   { path: '~/app/components', global: true },
-  // ],
-
-  // plugins: [
-  //   '~/app/plugins/theme.ts',
-  // ],
-
-  srcDir: "./app"
-
+  srcDir: "./app",
 })
