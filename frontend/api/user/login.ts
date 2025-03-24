@@ -26,7 +26,7 @@ export const loginSchema = {
             schema: loginSuccessfulResponseSchema,
         },
         fail: {
-            status: [400, 401, 403],
+            status: [401],
             schema: loginFailedResponseSchema
         }
     }

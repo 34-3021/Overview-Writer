@@ -17,9 +17,7 @@ def get_db():
 @router.post("/login", 
             response_model=LoginSuccessResponse,
             responses={
-                400: {"model": LoginFailedResponse},
                 401: {"model": LoginFailedResponse},
-                403: {"model": LoginFailedResponse}
             })
 async def login(
     request: LoginRequest, 
