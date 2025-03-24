@@ -15,7 +15,7 @@ const page = ref({
         // trailing: true,
         'trailing-icon': 'i-heroicons-arrow-small-right',
         'to': '#utils',
-        'size': 'xl',
+        // 'size': 'xl',
         // style: {
         //   borderRadius: '9999px',
         //   padding: '1rem 2rem',
@@ -60,32 +60,26 @@ const page = ref({
 <template>
   <div>
     <!-- Hero Section -->
-    <ULandingHero
+    <UPageHero
       :title="page.hero.title"
       :description="page.hero.description"
       :links="page.hero.links"
     />
 
     <!-- utils Section -->
-    <ULandingSection
-
+    <UPageSection
       icon="i-heroicons-rocket-launch"
       :title="page.utils.title"
       :description="page.utils.description"
     >
-      <ULandingGrid>
-        <ULandingCard
+      <UPageGrid>
+        <UPageCard
           v-for="(item, index) in page.utils.items"
-          id="utils"
           :key="index"
-          class="col-span-6 row-span-2"
-          :title="item.title"
-          :description="item.description"
-          :to="item.link"
-          :icon="item.icon"
+          v-bind="item"
         />
-      </ULandingGrid>
-    </ULandingSection>
+      </UPageGrid>
+    </UPageSection>
   </div>
 </template>
 

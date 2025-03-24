@@ -61,11 +61,11 @@ function responseSchemaMatch<
   if (!responseSchema) {
     if (response.status === 401) {
       const toast = useToast()
-      toast.add({ title: "401 Unauthorized", color: "red" });
+      toast.add({ title: "401 Unauthorized", color: "error" });
       throw new Error(`[${schema.name}]: Unauthorized.`);
     } else if (response.status.toString().startsWith("5")) {
       const toast = useToast()
-      toast.add({ title: "500 Server Error", color: "red" });
+      toast.add({ title: "500 Server Error", color: "error" });
       throw new Error(`[${schema.name}]: Server Error.`);
     } else {
       throw new Error(`[${schema.name}]: Response status ${status} not matched.`);
@@ -106,7 +106,7 @@ export async function callApi<
   const basePath = runtimeConfig.public.httpBase
   // Check the request
 
-  const parsedPayload = schema.requestSchema.safeParse(payload);
+  const parsedPayload = schema.requestSchema.safeParse((payload as any).data);
   if (!parsedPayload.success) {
     throw new Error(
       `[${schema.name}]: Request pre-check failed. Request-payload: ${JSON.stringify(payload)}`,

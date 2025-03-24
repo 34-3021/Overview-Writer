@@ -35,8 +35,7 @@ const route = useRoute()
     </template>
 
     <template #body>
-      <UAsideLinks :links="links" />
-
+      <UNavigationMenu orientation="vertical" :items="links" class="-mx-2.5" />
       <!-- <USeparator type="dashed" class="mt-4 mb-6" /> -->
     </template>
   </UHeader>

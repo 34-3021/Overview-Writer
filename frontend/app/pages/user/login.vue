@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user";
-import { callApi } from "~/api/api";
-import { loginSchema } from "@/api/user/login";
+import { useUserStore } from "~/store/user";
+import { callApi } from "~/../api/api";
+import { loginSchema } from "~/../api/user/login";
 
 const fields = [
   {
@@ -71,7 +71,7 @@ async function onSubmit(field: any) {
     const userStore = useUserStore();
     if (userStore.login(data.token)) {
       router.push("/");
-      toast.add({ title: "登录成功", color: "green" });
+      toast.add({ title: "登录成功", color: "success" });
     } else {
       errorMessage.value = "后端返回的数据无效";
     }
@@ -102,7 +102,7 @@ async function onSubmit(field: any) {
       <template #validation>
         <UAlert
           v-if="errorMessage"
-          color="red"
+          color="error"
           icon="i-heroicons-information-circle-20-solid"
           :title="errorMessage"
         />
