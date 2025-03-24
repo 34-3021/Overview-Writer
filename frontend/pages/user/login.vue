@@ -61,7 +61,7 @@ async function onSubmit(field: any) {
 
   const { type, data } = await callApi(loginSchema, {
     ...field,
-    password: await hashPassword(field.password)
+    // password: await hashPassword(field.password)
   });
 
   console.log(type, data);
