@@ -47,16 +47,16 @@ const links = computed<NavigationMenuItem[]>(() => {
       active: route.path === "/",
     },
     {
-      label: "文件管理",
+      label: "文献管理",
       icon: "i-material-symbols-folder-managed-outline",
       to: "/files",
       active: route.path.startsWith("/files"),
     },
     {
-      label: "椅子",
-      icon: "i-material-symbols-chair-alt-outline-rounded",
-      to: "/chair",
-      active: route.path.startsWith("/chair"),
+      label: "我的论文",
+      icon: "i-material-symbols-document-scanner-outline",
+      to: "/documents",
+      active: route.path.startsWith("/documents"),
     },
     {
       label: "椅子",

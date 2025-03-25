@@ -29,16 +29,16 @@ const page = ref({
     description: '',
     items: [
       {
-        title: '我也不知道写什么了先放把椅子在这里',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
-        link: '/chair',
-        icon: 'i-material-symbols-chair-alt-outline-rounded',
+        title: "上传文献",
+        description: "上传PDF或LaTeX文件进行解析",
+        link: "/files",
+        icon: "i-material-symbols-folder-managed-outline",
       },
       {
-        title: '我也不知道写什么了先放把椅子在这里',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
-        link: '/chair',
-        icon: 'i-material-symbols-chair-alt-outline-rounded',
+        title: "我的论文",
+        description: "创建全新的结构化文档模板",
+        link: "/documents",
+        icon: "i-material-symbols-document-scanner-outline",
       },
       {
         title: '我也不知道写什么了先放把椅子在这里',

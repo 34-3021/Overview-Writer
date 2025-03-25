@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from routers import auth, files
+from routers import auth, files, document
 from database import engine
 from models.user import User
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +29,13 @@ app.include_router(
     prefix="/files",
     tags=["Files"],
     dependencies=[Depends(get_current_user)]
+)
+
+app.include_router(
+    document.router,
+    prefix="/documents",
+    tags=["Documents"],
+    dependencies=[Depends(get_current_user)]  # 保持安全验证一致
 )
 
 @app.get("/health")
