@@ -11,5 +11,5 @@ const toast = useToast()
 userStore.logout()
 router.push('/user/login')
 
-toast.add({ title: '已成功登出，请重新登陆', color: 'success' })
+toast.add({ title: '已成功登出，请重新登陆', color: 'primary' })
 </script>

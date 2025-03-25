@@ -71,7 +71,7 @@ async function onSubmit(field: any) {
     const userStore = useUserStore();
     if (userStore.login(data.token)) {
       router.push("/");
-      toast.add({ title: "登录成功", color: "success" });
+      toast.add({ title: "登录成功", color: "primary" });
     } else {
       errorMessage.value = "后端返回的数据无效";
     }

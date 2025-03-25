@@ -40,7 +40,7 @@ const handleFileUpload = async (event: Event) => {
       await uploadApi(fileAPIs.upload, { file })
     }
     await refreshFiles()
-    useToast().add({ title: '文件上传成功', color: 'success' })
+    useToast().add({ title: '文件上传成功', color: 'primary' })
   } catch (error: any) {
     uploadError.value = error.message || '文件上传失败'
   } finally {
@@ -57,7 +57,7 @@ const handleDelete = async (fileId: number) => {
   try {
     await callApi(fileAPIs.delete, {}, { file_id: fileId.toString() })
     await refreshFiles()
-    useToast().add({ title: '文件删除成功', color: 'success' })
+    useToast().add({ title: '文件删除成功', color: 'primary' })
   } finally {
     deleteLoading.value = null
   }
