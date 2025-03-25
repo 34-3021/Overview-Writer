@@ -1,20 +1,32 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { callApi } from '~/../api/api'
 import { fileAPIs } from '~/../api/file'
 import { uploadApi } from '~~/api/upload'
 
 // 文件列表数据
-const { data: files, pending, refresh } = useAsyncData(
-  'files',
-  async () => {
-    const { data } = await callApi(fileAPIs.list, { page: 1, per_page: 100 })
-    return data
-  }
-)
-
-// 文件上传处理
+const files = ref<any[]>([])
+const loading = ref(false)
 const uploadLoading = ref(false)
 const uploadError = ref('')
+
+// 初始化加载文件
+onMounted(async () => {
+  await refreshFiles()
+})
+
+// 刷新文件列表
+const refreshFiles = async () => {
+  loading.value = true
+  try {
+    const { data } = await callApi(fileAPIs.list, {})
+    files.value = data as any[]
+  } catch (error) {
+    console.error('获取文件列表失败:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleFileUpload = async (event: Event) => {
   const input = event.target as HTMLInputElement
@@ -27,7 +39,7 @@ const handleFileUpload = async (event: Event) => {
     for (const file of input.files) {
       await uploadApi(fileAPIs.upload, { file })
     }
-    await refresh()
+    await refreshFiles()
     useToast().add({ title: '文件上传成功', color: 'success' })
   } catch (error: any) {
     uploadError.value = error.message || '文件上传失败'
@@ -44,7 +56,7 @@ const handleDelete = async (fileId: number) => {
   deleteLoading.value = fileId
   try {
     await callApi(fileAPIs.delete, {}, { file_id: fileId.toString() })
-    await refresh()
+    await refreshFiles()
     useToast().add({ title: '文件删除成功', color: 'success' })
   } finally {
     deleteLoading.value = null
@@ -79,7 +91,7 @@ const triggerFileSelect = () => fileInput.value?.click()
           icon="i-heroicons-arrow-path-20-solid"
           color="neutral"
           variant="ghost"
-          @onclick="refresh"
+          @onclick="refreshFiles"
         />
       </div>
     </template>
@@ -131,7 +143,7 @@ const triggerFileSelect = () => fileInput.value?.click()
     />
 
     <!-- 加载状态 -->
-    <div v-if="pending" class="flex justify-center py-8">
+    <div v-if="loading" class="flex justify-center py-8">
       <svg
         class="animate-spin h-8 w-8 text-primary-600"
         xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +167,7 @@ const triggerFileSelect = () => fileInput.value?.click()
     </div>
 
     <!-- 文件列表 -->
-    <div v-if="!pending && files?.length" class="border rounded-lg overflow-hidden">
+    <div v-if="!loading && files?.length" class="border rounded-lg overflow-hidden">
       <div
         v-for="file in files"
         :key="file.id"
@@ -164,7 +176,7 @@ const triggerFileSelect = () => fileInput.value?.click()
         <div class="min-w-0">
           <p class="font-medium truncate">{{ file.filename }}</p>
           <p class="text-sm text-gray-500 mt-1">
-            {{ file.file_type }} • {{ formatSize(file.size) }} •
+            {{ file.file_type == "application/pdf" ? "PDF" : "LaTeX" }} • {{ formatSize(file.size) }} •
             {{ new Date(file.upload_time).toLocaleDateString() }}
           </p>
         </div>
@@ -184,7 +196,7 @@ const triggerFileSelect = () => fileInput.value?.click()
 
     <!-- 空状态 -->
     <UEmptyState
-      v-else-if="!pending"
+      v-else-if="!loading"
       icon="i-heroicons-document-arrow-up"
       title="暂无文件"
       description="上传您的第一个文件以开始使用"

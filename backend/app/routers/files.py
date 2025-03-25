@@ -51,15 +51,11 @@ async def upload_file(
 
 @router.get("/", response_model=List[FileInDB])
 def list_files(
-    page: int = 1,
-    per_page: int = 10,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     return db.query(File)\
         .filter(File.user_id == current_user.id)\
-        .offset((page-1)*per_page)\
-        .limit(per_page)\
         .all()
 
 @router.get("/{file_id}", response_model=FileInDB)

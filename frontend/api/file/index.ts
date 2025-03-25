@@ -17,12 +17,6 @@ export const uploadRequestSchema = z.object({
 
 export const uploadResponseSchema = fileSchema;
 
-// 文件列表请求Schema
-export const listFilesRequestSchema = z.object({
-  page: z.number().min(1).default(1),
-  per_page: z.number().min(1).max(100).default(10),
-});
-
 export const listFilesResponseSchema = z.array(fileSchema);
 
 // 文件更新请求Schema
@@ -34,7 +28,7 @@ export const updateFileRequestSchema = z.object({
 export const fileAPIs = {
   upload: {
     name: "uploadFile",
-    path: "/files",
+    path: "/files/",
     method: "POST",
     token: true,
     requestSchema: uploadRequestSchema,
@@ -52,10 +46,10 @@ export const fileAPIs = {
 
   list: {
     name: "listFiles",
-    path: "/files",
+    path: "/files/",
     method: "GET",
     token: true,
-    requestSchema: listFilesRequestSchema,
+    requestSchema: z.object({}), // 无请求体
     responseSchema: {
       success: {
         status: [200],

@@ -106,7 +106,7 @@ export async function callApi<
   const basePath = runtimeConfig.public.httpBase
   // Check the request
 
-  const parsedPayload = schema.requestSchema.safeParse((payload as any).data);
+  const parsedPayload = schema.requestSchema.safeParse((payload as any)["_vts"] ? (payload as any).data : payload);
   if (!parsedPayload.success) {
     throw new Error(
       `[${schema.name}]: Request pre-check failed. Request-payload: ${JSON.stringify(payload)}`,
