@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, Depends, UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 import os
 import uuid
-
+from models.file import File
+from fastapi import File as FastAPIFile
 from models.user import User
 from schemas.file import FileInDB, FileCreate, FileUpdate
 from database import get_db
@@ -16,7 +17,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/", response_model=FileInDB)
 async def upload_file(
-    file: UploadFile = File(...),
+    file: UploadFile = FastAPIFile(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -36,7 +37,8 @@ async def upload_file(
         file_type=file.content_type,
         size=len(contents),
         storage_path=file_path,
-        user_id=current_user.id
+        user_id=current_user.id,
+        # owner=current_user
     )
     db.add(db_file)
     db.commit()
@@ -44,7 +46,7 @@ async def upload_file(
     
     # 预留大模型处理接口
     # await process_with_ai(file_path, db_file.id)
-    
+
     return db_file
 
 @router.get("/", response_model=List[FileInDB])

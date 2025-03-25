@@ -16,7 +16,7 @@ class FileInDB(FileBase):
     id: int
     user_id: int
     upload_time: datetime
-    processed: bool
+    # processed: bool
 
     class Config:
         from_attributes = True

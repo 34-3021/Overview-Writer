@@ -47,10 +47,10 @@ const links = computed<NavigationMenuItem[]>(() => {
       active: route.path === "/",
     },
     {
-      label: "椅子",
-      icon: "i-material-symbols-chair-alt-outline-rounded",
-      to: "/chair",
-      active: route.path.startsWith("/chair"),
+      label: "文件管理",
+      icon: "i-material-symbols-folder-managed-outline",
+      to: "/files",
+      active: route.path.startsWith("/files"),
     },
     {
       label: "椅子",
@@ -95,4 +95,15 @@ const links = computed<NavigationMenuItem[]>(() => {
 
 <style>
 /* Safelist (do not remove): [&>div]:*:my-0 [&>div]:*:w-full h-64 !px-0 !py-0 !pt-0 !pb-0 !p-0 !justify-start !justify-end !min-h-96 h-136 */
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 </style>

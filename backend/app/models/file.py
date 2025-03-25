@@ -11,7 +11,7 @@ class File(Base):
     filename = Column(String(255), nullable=False)
     file_type = Column(String(50))  # MIME type
     size = Column(Integer)  # Bytes
-    upload_time = Column(DateTime, default=lambda: datetime.utcnow)
+    upload_time = Column(DateTime, default=datetime.now, nullable=False)
     # processed = Column(Boolean, default=False)  # 是否被大模型处理
     storage_path = Column(String(512), unique=True)  # 实际存储路径
     

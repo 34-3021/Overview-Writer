@@ -4,6 +4,24 @@ import argparse
 def print_files(directory):
     for root, dirs, files in os.walk(directory):
         for filename in files:
+            forbidden_root = [
+                "node_modules",
+                ".git",
+                "venv",
+                ".vscode",
+                ".nuxt",
+                ".output",
+            ]
+            if any([f in root for f in forbidden_root]):
+                continue
+
+            forbidden_file = [
+                "pnpm-lock.yaml",
+                ".gitignore"
+            ]
+            if any([f in filename for f in forbidden_file]):
+                continue
+
             filepath = os.path.join(root, filename)
             relative_path = os.path.relpath(filepath, directory)
             try:

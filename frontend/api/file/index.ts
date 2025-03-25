@@ -6,8 +6,8 @@ export const fileSchema = z.object({
   filename: z.string(),
   file_type: z.string(),
   size: z.number(),
-  upload_time: z.string().datetime(),
-  processed: z.boolean(),
+  upload_time: z.string() // .datetime(),
+  // processed: z.boolean(),
 });
 
 // 文件上传请求Schema
@@ -15,10 +15,7 @@ export const uploadRequestSchema = z.object({
   file: z.instanceof(File), // 浏览器环境下使用
 });
 
-export const uploadResponseSchema = z.object({
-  ...fileSchema.shape,
-  message: z.string().optional(),
-});
+export const uploadResponseSchema = fileSchema;
 
 // 文件列表请求Schema
 export const listFilesRequestSchema = z.object({
@@ -43,7 +40,7 @@ export const fileAPIs = {
     requestSchema: uploadRequestSchema,
     responseSchema: {
       success: {
-        status: [201],
+        status: [200, 201],
         schema: uploadResponseSchema,
       },
       fail: {

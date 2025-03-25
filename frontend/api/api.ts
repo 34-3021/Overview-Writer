@@ -10,7 +10,7 @@ export type APIMock = (
 };
 
 // Define the ResponseType structure, where ZodType retains inference
-type ResponseType<T extends { [key: string]: { schema: z.ZodType<object> } }> = {
+export type ResponseType<T extends { [key: string]: { schema: z.ZodType<object> } }> = {
   [K in keyof T]: {
     status: readonly number[];
     schema: T[K]["schema"];
