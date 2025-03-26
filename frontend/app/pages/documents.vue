@@ -16,12 +16,12 @@ const documents = ref<any[]>([])
 const loading = ref(false)
 const deleteLoading = ref<number | null>(null)
 
-// 初始化加载文档
+// 初始化加载论文
 onMounted(async () => {
   await refreshDocuments()
 })
 
-// 刷新文档列表
+// 刷新论文列表
 const refreshDocuments = async () => {
   loading.value = true
   try {
@@ -36,13 +36,13 @@ const refreshDocuments = async () => {
   }
 }
 
-// 创建文档
+// 创建论文
 const handleCreate = async () => {
   errors.value = []
   
   try {
     // 校验输入
-    if (!form.title) throw new Error('文档标题不能为空')
+    if (!form.title) throw new Error('论文标题不能为空')
     
     let config = {}
     try {
@@ -65,7 +65,7 @@ const handleCreate = async () => {
     popover.value = false
     
     await refreshDocuments()
-    useToast().add({ title: '文档创建成功', color: 'primary' })
+    useToast().add({ title: '论文创建成功', color: 'primary' })
   } catch (error: any) {
     errors.value = [error.message]
     useToast().add({ 
@@ -76,13 +76,13 @@ const handleCreate = async () => {
   }
 }
 
-// 删除文档
+// 删除论文
 const handleDelete = async (docId: number) => {
   deleteLoading.value = docId
   try {
     await callApi(documentAPIs.delete, {}, { doc_id: docId.toString() })
     await refreshDocuments()
-    useToast().add({ title: '文档删除成功', color: 'primary' })
+    useToast().add({ title: '论文删除成功', color: 'primary' })
   } finally {
     deleteLoading.value = null
   }
@@ -93,39 +93,56 @@ const handleDelete = async (docId: number) => {
   <UCard class="max-w-4xl mx-auto">
     <template #header>
       <div class="flex items-center justify-between">
-        <h2 class="text-xl font-semibold">文档管理</h2>
-        <UModal v-model="popover">
+        <h2 class="text-xl font-semibold">论文管理</h2>
+        <UModal v-model:open="popover">
           <UButton 
             icon="i-heroicons-plus"
-            label="新建文档"
+            label="新建论文"
             color="primary"
             @click="popover = true"
+            class="ml-10 mr-3"
+          />
+          <UButton
+            icon="i-heroicons-arrow-path-20-solid"
+            color="neutral"
+            label="刷新文件列表"
+            variant="ghost"
+            @onclick="refreshDocuments"
           />
 
           <template #content>
-            <div class="p-4 w-96 space-y-4">
-              <h3 class="font-semibold text-lg">新建文档</h3>
-              
-              <UFormGroup label="文档标题" required>
-                <UInput 
-                  v-model="form.title"
-                  placeholder="请输入文档标题"
-                  autofocus
-                />
-              </UFormGroup>
-
-              <UFormGroup 
-                label="配置项（JSON格式）"
-                help="可在此处输入文档的配置参数"
+            <UCard class="mx-0 my-0">
+              <template #header>
+                <h3 class="font-semibold text-lg">新建论文</h3>
+              </template>
+              <UForm
+                :state="form"
+                class="space-y-4"
               >
-                <UTextarea
-                  v-model="form.configJson"
-                  placeholder='{"autoSave": true, "template": "default"}'
-                  :rows="5"
-                  resize
-                  class="font-mono text-sm"
-                />
-              </UFormGroup>
+                <UFormField label="论文标题" name="title" required>
+                  <UInput
+                    v-model="form.title"
+                    placeholder="请输入论文标题"
+                    autofocus
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField  
+                  label="配置项（JSON格式）"
+                  help="可在此处输入论文的配置参数"
+                  name="configJson"
+                >
+                  <UTextarea
+                    v-model="form.configJson"
+                    placeholder='{"autoSave": true, "template": "default"}'
+                    :rows="5"
+                    resize
+                    class="font-mono text-sm w-full"
+                  />
+                </UFormField>
+              
+              </UForm>
 
               <UAlert
                 v-if="errors.length"
@@ -134,22 +151,25 @@ const handleDelete = async (docId: number) => {
                 icon="i-heroicons-exclamation-triangle"
                 color="error"
                 variant="subtle"
+                class="mt-2"
               />
 
-              <div class="flex gap-2 justify-end">
-                <UButton
-                  label="取消"
-                  color="neutral"
-                  @click="popover = false"
-                />
+              <template #footer>
                 <UButton
                   label="创建"
                   color="primary"
                   :loading="loading"
                   @click="handleCreate"
+                  class="mr-3"
                 />
-              </div>
-            </div>
+                <UButton
+                  label="取消"
+                  color="neutral"
+                  @click="popover = false"
+                  variant="ghost"
+                />
+              </template>
+            </UCard>
           </template>
         </UModal>
       </div>
@@ -160,7 +180,7 @@ const handleDelete = async (docId: number) => {
       <UProgress animation="elastic" />
     </div>
 
-    <!-- 文档列表 -->
+    <!-- 论文列表 -->
     <div v-if="documents.length" class="space-y-4">
       <div 
         v-for="doc in documents"
@@ -185,11 +205,10 @@ const handleDelete = async (docId: number) => {
     </div>
 
     <!-- 空状态 -->
-    <UEmptyState
-      v-else
-      icon="i-heroicons-document"
-      title="暂无文档"
-      description="点击上方按钮创建第一个文档"
-    />
+    <div v-else class="flex flex-col items-center justify-center space-y-2 border border-gray-200 rounded-lg p-6 shadow-sm text-center">
+      <UIcon name="i-material-symbols-warning-rounded" class="text-gray-400 text-xl"/>
+      <div class="text-gray-600 font-medium text-lg">暂无论文</div>
+      <div class="text-gray-400 text-sm">点击上方按钮创建第一个论文</div>
+    </div>
   </UCard>
 </template>
