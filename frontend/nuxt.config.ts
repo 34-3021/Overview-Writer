@@ -48,4 +48,8 @@ export default defineNuxtConfig({
   
   compatibilityDate: '2025-02-03',
   srcDir: "./app",
+
+  icon: {
+    mode: 'local' // Set server bundle mode to use local icons
+  }
 })

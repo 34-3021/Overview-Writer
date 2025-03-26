@@ -21,7 +21,7 @@ export const documentAPIs = {
       content: z.record(z.any())
     }),
     responseSchema: {
-      success: { status: [201], schema: documentSchema },
+      success: { status: [200, 201], schema: documentSchema },
       fail: { status: [400, 401], schema: z.object({ message: z.string() }) }
     }
   } as const,
