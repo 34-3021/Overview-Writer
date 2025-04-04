@@ -267,7 +267,7 @@ const deleteSection = (sectionId: string) => {
           </div>
 
           <!-- Document content -->
-          <div class="space-y-4">
+          <div class="space-y-4 overflow-y-auto h-115 pr-2">
             <div
               v-for="(section, index) in document.content.sections"
               :key="section.id"
@@ -345,6 +345,7 @@ const deleteSection = (sectionId: string) => {
                   placeholder="Write your content here..."
                   resize
                   class="w-full"
+                  autoresize="true"
                   :rows="4"
                 />
               </div>
