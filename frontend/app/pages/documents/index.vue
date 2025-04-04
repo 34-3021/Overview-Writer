@@ -186,7 +186,6 @@ const handleDelete = async (docId: number) => {
         v-for="doc in documents"
         :key="doc.id"
         class="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-        @click="navigateTo(`/documents/${doc.id}`)"
       >
         <div>
           <h3 class="font-medium">{{ doc.title }}</h3>
@@ -195,13 +194,21 @@ const handleDelete = async (docId: number) => {
           </p>
         </div>
         
-        <UButton
-          color="warning"
-          variant="ghost"
-          :loading="deleteLoading === doc.id"
-          @click="handleDelete(doc.id)"
-          icon="i-heroicons-trash"
-        />
+        <div class="flex items-center gap-2">
+          <UButton
+            color="warning"
+            variant="ghost"
+            :loading="deleteLoading === doc.id"
+            @click="handleDelete(doc.id)"
+            icon="i-heroicons-trash"
+          />
+          <UButton
+            @click="navigateTo(`/documents/${doc.id}`)"
+            icon="i-heroicons-arrow-right"
+            color="primary"
+            variant="ghost"
+          />
+        </div>
       </div>
     </div>
 

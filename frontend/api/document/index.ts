@@ -94,7 +94,8 @@ export const documentAPIs = {
     method: "POST",
     token: true,
     requestSchema: z.object({
-      type: z.string()
+      type: z.string(),
+      prompt: z.string(),
     }),
     responseSchema: {
       success: { status: [200], schema: generateContentSchema },

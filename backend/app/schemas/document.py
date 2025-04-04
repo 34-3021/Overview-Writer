@@ -31,3 +31,8 @@ class DocumentInDB(DocumentBase):
 
     class Config:
         from_attributes = True
+
+class GenerateContentRequest(BaseModel):
+    type: str
+    prompt: Optional[str] = None
+    
