@@ -186,6 +186,7 @@ const handleDelete = async (docId: number) => {
         v-for="doc in documents"
         :key="doc.id"
         class="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+        @click="navigateTo(`/documents/${doc.id}`)"
       >
         <div>
           <h3 class="font-medium">{{ doc.title }}</h3>
