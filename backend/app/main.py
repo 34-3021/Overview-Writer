@@ -5,6 +5,18 @@ from models.user import User
 from fastapi.middleware.cors import CORSMiddleware
 from security import get_current_user
 
+import subprocess
+
+def check_pandoc_available():
+    try:
+        subprocess.run(['pandoc', '--version'], 
+                      capture_output=True, check=True)
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        raise RuntimeError(
+            "Pandoc未安装，PDF导出功能将不可用。"
+            "请安装pandoc: https://pandoc.org/installing.html"
+        )
+
 User.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -37,6 +49,13 @@ app.include_router(
     tags=["Documents"],
     dependencies=[Depends(get_current_user)]  # 保持安全验证一致
 )
+
+@app.on_event("startup")
+async def startup_event():
+    try:
+        check_pandoc_available()
+    except RuntimeError as e:
+        print(f"警告: {str(e)}")
 
 @app.get("/health")
 async def health_check():

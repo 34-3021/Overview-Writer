@@ -36,3 +36,5 @@ class GenerateContentRequest(BaseModel):
     type: str
     prompt: Optional[str] = None
     
+class ExportFormat(BaseModel):
+    format: str  # "pdf", "markdown", or "latex"

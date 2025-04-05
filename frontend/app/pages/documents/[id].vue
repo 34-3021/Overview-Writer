@@ -6,6 +6,7 @@ import { z } from 'zod'
 const route = useRoute()
 const toast = useToast()
 const docId = computed(() => route.params.id as string)
+const docIdNum = computed(() => Number.parseInt(route.params.id as string))
 
 // Document state
 const document = ref<any>(null)
@@ -219,6 +220,12 @@ const deleteSection = (sectionId: string) => {
 <template>
   <UContainer class="py-8">
     <!-- Loading state -->
+
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">编辑文档</h1>
+      <DocumentExport :doc-id="docIdNum" />
+    </div>
+
     <div v-if="loading" class="flex justify-center py-12">
       <UProgress animation="elastic" />
     </div>
@@ -267,7 +274,7 @@ const deleteSection = (sectionId: string) => {
           </div>
 
           <!-- Document content -->
-          <div class="space-y-4 overflow-y-auto h-115 pr-2">
+          <div class="space-y-4 overflow-y-auto h-104 pr-2">
             <div
               v-for="(section, index) in document.content.sections"
               :key="section.id"
@@ -345,7 +352,7 @@ const deleteSection = (sectionId: string) => {
                   placeholder="Write your content here..."
                   resize
                   class="w-full"
-                  autoresize="true"
+                  :autoresize="true"
                   :rows="4"
                 />
               </div>
@@ -375,7 +382,7 @@ const deleteSection = (sectionId: string) => {
           </template>
 
           <!-- Chat messages -->
-          <div class="space-y-4 h-96 overflow-y-auto">
+          <div class="space-y-4 h-85 overflow-y-auto">
             <div
               v-for="(message, index) in aiMessages"
               :key="index"

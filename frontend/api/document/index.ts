@@ -101,5 +101,27 @@ export const documentAPIs = {
       success: { status: [200], schema: generateContentSchema },
       fail: { status: [400, 401, 404], schema: z.object({ message: z.string() }) }
     }
-  } as const
+  } as const,
+  export: {
+    name: "exportDocument",
+    path: "/documents/:doc_id:/export",
+    method: "POST",
+    token: true,
+    requestSchema: z.object({
+      format: z.enum(["pdf", "markdown", "latex"])
+    }),
+    responseSchema: {
+      success: {
+        status: [200],
+        schema: z.object({
+          message: z.string(),
+          filename: z.string()
+        })
+      },
+      fail: {
+        status: [400, 401, 404],
+        schema: z.object({ message: z.string() })
+      }
+    }
+  } as const,
 };

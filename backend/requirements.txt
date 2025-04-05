@@ -6,3 +6,5 @@ sqlalchemy>=1.4.0
 aiosqlite
 pydantic>=1.8.0
 python-dotenv>=0.15.0
+pandoc
+pypandoc
