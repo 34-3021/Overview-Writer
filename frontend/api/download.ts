@@ -13,6 +13,7 @@ export async function downloadApi<
   schema: APISchema<RequestType, ResponseComposedType>,
   payload: RequestType,
   param: Record<string, string> = {},
+  filename: string = "download",
   cookie?: string | null
 ): Promise<ResponseUnion<ResponseComposedType>> {
   // 获取环境变量
@@ -131,7 +132,6 @@ export async function downloadApi<
   // 处理文件下载
   const blob = await fetchResponse.blob();
   const contentDisposition = fetchResponse.headers.get("content-disposition") || "";
-  let filename = "download";
 
   // 从content-disposition中提取文件名
   const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);

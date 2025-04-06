@@ -5,7 +5,8 @@ import { documentAPIs } from '~/../api/document'
 import type { DropdownMenuItem } from '@nuxt/ui'
 
 const props = defineProps<{
-  docId: number
+  docId: number,
+  filename: string
 }>()
 
 const toast = useToast()
@@ -30,12 +31,12 @@ const handleExport = async () => {
     await downloadApi(
       documentAPIs.export, 
       { format: formatLabels.value[selectedFormat.value] }, 
-      { doc_id: props.docId.toString() }
+      { doc_id: props.docId.toString() },
+      props.filename
     )
     
     toast.add({
       title: '导出成功',
-      description: '文件下载已开始',
       color: 'primary'
     })
   } catch (error) {
@@ -56,7 +57,6 @@ const handleExport = async () => {
       <UButton
         color="neutral"
         variant="outline"
-        :loading="loading"
         trailing-icon="i-heroicons-chevron-down-20-solid"
       >
         导出格式

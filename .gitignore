@@ -317,3 +317,4 @@ pyrightconfig.json
 
 util/llm/
 backend/app/uploads
+backend/app/exports

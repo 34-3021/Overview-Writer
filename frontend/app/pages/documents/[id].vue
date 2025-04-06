@@ -223,7 +223,7 @@ const deleteSection = (sectionId: string) => {
 
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">编辑文档</h1>
-      <DocumentExport :doc-id="docIdNum" />
+      <DocumentExport :doc-id="docIdNum" :filename="document ? document.title : 'document'"/>
     </div>
 
     <div v-if="loading" class="flex justify-center py-12">

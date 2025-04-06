@@ -7,15 +7,42 @@ from database import get_db
 from security import get_current_user
 from models.user import User
 from typing import List, Dict, Any
-# import tempfile
 import zipfile
 from pathlib import Path
 import os
-import subprocess
+from markdown import markdown
+from weasyprint import HTML
+
+def markdown_to_pdf(md_file_path, pdf_file_path):
+    # Read the markdown file
+    with open(md_file_path, 'r', encoding='utf-8') as f:
+        md_text = f.read()
+    
+    # Convert markdown to HTML
+    html_text = markdown(md_text)
+    
+    # Create a full HTML document with CSS styling
+    full_html = f"""
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; }}
+                h1, h2, h3 {{ color: #2c3e50; }}
+                code {{ background: #f5f5f5; padding: 2px 5px; }}
+                pre {{ background: #f5f5f5; padding: 10px; overflow: auto; }}
+            </style>
+        </head>
+        <body>{html_text}</body>
+    </html>
+    """
+    
+    # Convert HTML to PDF
+    HTML(string=full_html).write_pdf(pdf_file_path)
 
 router = APIRouter()
 
-EXPORT_DIR = "uploads"
+EXPORT_DIR = "exports"
 os.makedirs(EXPORT_DIR, exist_ok=True)
 
 @router.post("/", response_model=DocumentInDB)
@@ -144,7 +171,6 @@ def export_document(
         raise HTTPException(404, "Document not found")
     
     temp_path = Path(EXPORT_DIR)
-    print(temp_path)
     
     if export_format.format == "pdf":
         # 生成PDF文件
@@ -169,9 +195,9 @@ def export_document(
         
     elif export_format.format == "latex":
         # 生成LaTeX文件并打包为zip
-        latex_dir = temp_path / "latex"
-        latex_dir.mkdir()
-        
+        latex_dir = temp_path / document.title / "latex"
+        latex_dir.mkdir(parents=True, exist_ok=True)
+
         # 生成主tex文件
         main_tex = latex_dir / "main.tex"
         generate_latex(document.content, main_tex)
@@ -194,29 +220,6 @@ def export_document(
     else:
         raise HTTPException(400, "Unsupported export format")
 
-def generate_pdf(content: dict, output_path: Path):
-    """生成PDF文件：先转为Markdown再用pandoc转PDF"""
-    try:
-        # 先创建临时Markdown文件
-        md_path = output_path.with_suffix('.md')
-        generate_markdown(content, md_path)
-        
-        # 使用pandoc转换
-        subprocess.run([
-            'pandoc', 
-            str(md_path),
-            '-o', str(output_path),
-            '--pdf-engine=xelatex',
-            '--template=template.tex',
-            '-V', 'mainfont="SimSun"',
-            '-V', 'geometry:margin=1in'
-        ], check=True)
-        
-    except subprocess.CalledProcessError as e:
-        raise HTTPException(500, f"PDF生成失败: {str(e)}")
-    except Exception as e:
-        raise HTTPException(500, f"PDF生成错误: {str(e)}")
-
 def generate_markdown(content: dict, output_path: Path):
     """生成Markdown文件"""
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -228,6 +231,17 @@ def generate_markdown(content: dict, output_path: Path):
                 f.write(f"## {section['content']}\n\n")
             else:
                 f.write(f"{section['content']}\n\n")
+
+def generate_pdf(content: dict, output_path: Path):
+    """生成PDF文件：先转为Markdown再用pandoc转PDF"""
+    try:
+        # 先创建临时Markdown文件
+        md_path = output_path.with_suffix('.md')
+        generate_markdown(content, md_path)
+        print(f"Markdown文件已生成: {md_path}")
+        markdown_to_pdf(md_path, output_path)
+    except Exception as e:
+        raise HTTPException(500, f"PDF生成错误: {str(e)}")
 
 def generate_latex(content: dict, output_path: Path):
     """生成完整的LaTeX文档"""
