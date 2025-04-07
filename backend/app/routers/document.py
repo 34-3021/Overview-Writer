@@ -238,7 +238,6 @@ def generate_pdf(content: dict, output_path: Path):
         # 先创建临时Markdown文件
         md_path = output_path.with_suffix('.md')
         generate_markdown(content, md_path)
-        print(f"Markdown文件已生成: {md_path}")
         markdown_to_pdf(md_path, output_path)
     except Exception as e:
         raise HTTPException(500, f"PDF生成错误: {str(e)}")
