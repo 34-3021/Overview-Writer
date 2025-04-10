@@ -18,6 +18,8 @@ from .llm import (
     ContentGenerationRequest
 )
 
+from .document import ProcessLocalFileRequest, FileType
+
 __all__ = [
     "StandardResponse",
     "EmbeddingRequest",
@@ -31,5 +33,7 @@ __all__ = [
     "Message",
     "ChatCompletionRequest",
     "ChatCompletionResponse",
-    "ContentGenerationRequest"
+    "ContentGenerationRequest",
+    "ProcessLocalFileRequest",
+    "FileType"
 ]

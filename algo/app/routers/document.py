@@ -4,6 +4,8 @@ from services.document import DocumentService
 import os
 from datetime import datetime
 from typing import Dict
+from schemas.document import ProcessLocalFileRequest
+from pathlib import Path
 
 router = APIRouter()
 
@@ -31,6 +33,26 @@ async def process_document(
         
         # 删除临时文件
         os.remove(file_path)
+        
+        return result
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/process-local", response_model=StandardResponse)
+async def process_local_file(request: ProcessLocalFileRequest):
+    try:
+        # 验证文件路径
+        file_path = Path("../../uploads") / request.file_path
+        if not file_path.exists():
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        # 处理文件
+        result = DocumentService.process_uploaded_file(
+            file_path=str(file_path),
+            file_type=request.file_type,
+            collection_name=request.collection_name
+        )
         
         return result
         
