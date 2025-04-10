@@ -59,12 +59,6 @@ const links = computed<NavigationMenuItem[]>(() => {
       active: route.path.startsWith("/documents"),
     },
     {
-      label: "椅子",
-      icon: "i-material-symbols-chair-alt-outline-rounded",
-      to: "/chair",
-      active: route.path.startsWith("/chair"),
-    },
-    {
       label: "登出",
       icon: "i-material-symbols-logout-rounded",
       to: "/user/logout",
