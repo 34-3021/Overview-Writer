@@ -317,5 +317,6 @@ pyrightconfig.json
 
 util/llm/
 backend/app/uploads
+uploads
 backend/app/exports
 chroma/*

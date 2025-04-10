@@ -12,7 +12,7 @@ from security import get_current_user
 
 router = APIRouter()
 
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = "../../uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/", response_model=FileInDB)
