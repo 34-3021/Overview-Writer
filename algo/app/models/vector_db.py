@@ -14,7 +14,11 @@ class VectorDB:
                     settings=chromadb.Settings(anonymized_telemetry=False)
                 )
             
-            self.embedding_func = embedding_functions.DefaultEmbeddingFunction()
+            self.embedding_func = embedding_functions.OpenAIEmbeddingFunction(
+                api_key=settings.query_api_key,
+                api_base=settings.query_api_base,
+                model_name=settings.query_model
+            )
             # test the connection
             self.client.heartbeat()
             

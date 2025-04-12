@@ -8,9 +8,9 @@ from services.vector_db import VectorDBService
 
 router = APIRouter()
 
-@router.post("/collections")
-async def create_collection(request: CollectionCreateRequest):
-    return VectorDBService.create_collection(request.name)
+# @router.post("/collections")
+# async def create_collection(request: CollectionCreateRequest):
+#     return VectorDBService.create_collection(request.name)
 
 @router.post("/documents")
 async def add_documents(request: DocumentAddRequest):

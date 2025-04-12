@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
 from models.vector_db import vector_db
+from fastapi import HTTPException
 
 class VectorDBService:
     @staticmethod
@@ -33,8 +34,9 @@ class VectorDBService:
         try:
             collection = vector_db.get_collection(collection_name)
         except Exception as e:
-            print(f"Collection {collection_name} not found, creating new one")
-            collection = vector_db.create_collection(collection_name)
+            # print(f"Collection {collection_name} not found, creating new one")
+            # collection = vector_db.create_collection(collection_name)
+            raise HTTPException(status_code=404, detail=f"No collection {collection_name} found")
 
         results = collection.query(
             query_texts=query_texts,
