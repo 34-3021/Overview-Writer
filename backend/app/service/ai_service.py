@@ -23,18 +23,18 @@ class AIService:
             )
 
     @staticmethod
-    def query_related_documents(query_text: str, n_results: int = 3) -> list:
+    def query_related_documents(query_text: str, collection_name: str = "default", n_results: int = 3) -> list:
         try:
             response = requests.post(
                 f"{settings.ALGO_BASE_URL}/vector-db/query",
                 json={
-                    "collection_name": "default",
+                    "collection_name": collection_name,
                     "query_texts": [query_text],
                     "n_results": n_results
                 }
             )
             response.raise_for_status()
-            return response.json()["default"][0]  # 返回第一个查询结果的所有文档
+            return response.json()[collection_name][0]  # 返回第一个查询结果的所有文档
         except Exception as e:
             raise HTTPException(
                 status_code=500,

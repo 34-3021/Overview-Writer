@@ -29,7 +29,13 @@ class VectorDBService:
         n_results: int = 5,
         where: Dict[str, Any] = None
     ) -> Dict[str, Any]:
-        collection = vector_db.get_collection(collection_name)
+        
+        try:
+            collection = vector_db.get_collection(collection_name)
+        except Exception as e:
+            print(f"Collection {collection_name} not found, creating new one")
+            collection = vector_db.create_collection(collection_name)
+
         results = collection.query(
             query_texts=query_texts,
             n_results=n_results,

@@ -47,16 +47,14 @@ async def upload_file(
     db.refresh(db_file)
     
     try:
-        print(file.content_type, file_path)
         response = requests.post(
             f"{settings.ALGO_BASE_URL}/document/process-local",
             json={
                 "file_path": unique_name,
                 "file_type": file.content_type,
-                "collection_name": str(current_user.id)
+                "collection_name": f"user_{current_user.id}"
             }
         )
-        print(response.status_code, response.text)
         response.raise_for_status()
     except Exception as e:
         print(f"Document processing failed: {str(e)}")

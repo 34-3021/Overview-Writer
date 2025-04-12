@@ -139,7 +139,7 @@ def generate_content(
         raise HTTPException(404, "Document not found")
     
     # 查询相关文献
-    related_docs = AIService.query_related_documents(document.title)
+    related_docs = AIService.query_related_documents(document.title, f"user_{user.id}")
     context = "\n\n".join(related_docs) if related_docs else ""
     
     # 生成内容
