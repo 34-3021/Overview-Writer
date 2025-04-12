@@ -9,6 +9,8 @@ from models.user import User
 from schemas.file import FileInDB, FileCreate, FileUpdate
 from database import get_db
 from security import get_current_user
+import requests
+from config import settings
 
 router = APIRouter()
 
@@ -44,8 +46,20 @@ async def upload_file(
     db.commit()
     db.refresh(db_file)
     
-    # 预留大模型处理接口
-    # await process_with_ai(file_path, db_file.id)
+    try:
+        print(file.content_type, file_path)
+        response = requests.post(
+            f"{settings.ALGO_BASE_URL}/document/process-local",
+            json={
+                "file_path": unique_name,
+                "file_type": file.content_type,
+                "collection_name": str(current_user.id)
+            }
+        )
+        print(response.status_code, response.text)
+        response.raise_for_status()
+    except Exception as e:
+        print(f"Document processing failed: {str(e)}")
 
     return db_file
 
