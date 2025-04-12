@@ -10,10 +10,11 @@ class AIService:
             response = requests.post(
                 f"{settings.ALGO_BASE_URL}/llm/generate",
                 json={
-                    "prompt": {"prompt": prompt},
+                    "prompt": prompt,
                     "context": context
                 }
             )
+            print(response.status_code, response.content)
             response.raise_for_status()
             return response.json()["content"]
         except Exception as e:
@@ -33,8 +34,9 @@ class AIService:
                     "n_results": n_results
                 }
             )
+            print(response.status_code, response.content)
             response.raise_for_status()
-            return response.json()[collection_name][0]  # 返回第一个查询结果的所有文档
+            return response.content.decode()  # 返回第一个查询结果的所有文档
         except Exception as e:
             raise HTTPException(
                 status_code=500,

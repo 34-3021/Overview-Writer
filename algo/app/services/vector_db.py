@@ -30,7 +30,8 @@ class VectorDBService:
         n_results: int = 5,
         where: Dict[str, Any] = None
     ) -> Dict[str, Any]:
-        
+        print(f"Querying text: {query_texts}")
+        print(f"Querying collection: {collection_name}")
         try:
             collection = vector_db.get_collection(collection_name)
         except Exception as e:
@@ -38,11 +39,14 @@ class VectorDBService:
             # collection = vector_db.create_collection(collection_name)
             raise HTTPException(status_code=404, detail=f"No collection {collection_name} found")
 
+        print(f"Queried collection: {collection_name}")
+
         results = collection.query(
             query_texts=query_texts,
             n_results=n_results,
             where=where
         )
+        print(results)
         return {
             "documents": results["documents"],
             "distances": results["distances"],

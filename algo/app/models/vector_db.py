@@ -26,12 +26,14 @@ class VectorDB:
             raise ConnectionError(f"Failed to connect to ChromaDB: {str(e)}")
     
     def get_collection(self, name: str):
+        print(f"getting collection: {name}")
         return self.client.get_collection(
             name=name,
             embedding_function=self.embedding_func
         )
     
     def create_collection(self, name: str):
+        print("createing collection")
         return self.client.create_collection(
             name=name,
             embedding_function=self.embedding_func

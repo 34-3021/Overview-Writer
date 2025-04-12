@@ -29,11 +29,11 @@ class ChatCompletionResponse(BaseModel):
     usage: ChatCompletionResponseUsage
 
 class ContentGenerationRequest(BaseModel):
-    doc_id: int
-    user_id: int
-    prompt: dict
+    # doc_id: int
+    # user_id: int
+    prompt: str
     context: Optional[str] = None
 
 class ContentGenerationResponse(BaseModel):
     content: str
-    type: str
+    # type: str

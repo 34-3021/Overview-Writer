@@ -114,17 +114,6 @@ const generateAI = async () => {
     
     if (type === 'success') {
       section.content = data.content
-      
-      // is it necessary?????????????
-      // Add to chat history
-      aiMessages.value.push({
-        role: 'user',
-        content: form.aiPrompt
-      })
-      aiMessages.value.push({
-        role: 'assistant',
-        content: data.content
-      })
     }
   } catch (error) {
     toast.add({ title: 'Failed to generate content', color: 'error' })
@@ -196,7 +185,7 @@ const saveDocument = async (quite: boolean) => {
     if (type === 'success' && !quite) {
       toast.add({ title: 'Document saved', color: 'primary' })
     }
-  } catch (error) {
+  } catch (error: any) {
     toast.add({ 
       title: 'Failed to save document', 
       description: error.message,
@@ -301,7 +290,7 @@ const deleteSection = (sectionId: string) => {
                   title="Move down"
                 />
                 <UButton
-                  v-if="!section.isAI"
+                  v-if="section.type === 'paragraph'"
                   @click="openAIPrompt(section.id)"
                   :loading="generating"
                   icon="i-heroicons-sparkles"

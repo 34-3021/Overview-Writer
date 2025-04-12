@@ -55,9 +55,14 @@ async def upload_file(
                 "collection_name": f"user_{current_user.id}"
             }
         )
+        print(response.status_code, response.text)
         response.raise_for_status()
     except Exception as e:
         print(f"Document processing failed: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Document processing failed"
+        )
 
     return db_file
 

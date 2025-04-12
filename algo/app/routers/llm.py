@@ -22,10 +22,10 @@ async def chat_completion_stream(request: ChatCompletionRequest):
 @router.post("/generate", response_model=ContentGenerationResponse)
 async def generate_content(request: ContentGenerationRequest):
     content = LLMService.generate_review_content(
-        prompt=request.prompt.get("prompt", ""),
+        prompt=request.prompt,
         context=request.context or ""
     )
     return {
         "content": content,
-        "type": request.prompt.get("type", "paragraph")
+        # "type": request.prompt.get("type", "paragraph")
     }

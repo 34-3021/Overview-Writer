@@ -22,12 +22,16 @@ class DocumentService:
         # embeddings = EmbeddingService.embed_documents(chunks)
         
         # 存入向量数据库
+        print(f"Processing file: {file_path}")
+        print(f"Collection name: {collection_name}")
         try:
             collection = vector_db.get_collection(collection_name)
         except Exception as e:
             print(f"Collection {collection_name} not found, creating new one")
             collection = vector_db.create_collection(collection_name)
-            
+
+        print(f"Queried collection: {collection_name}")
+        print(f"Adding {len(chunks)} chunks to collection")
         ids = [f"{Path(file_path).stem}_{i}" for i in range(len(chunks))]
         collection.add(
             documents=chunks,

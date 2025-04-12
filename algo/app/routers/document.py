@@ -44,7 +44,9 @@ async def process_local_file(request: ProcessLocalFileRequest):
     try:
         # 验证文件路径
         file_path = Path("../../uploads") / request.file_path
+        print(file_path)
         if not file_path.exists():
+            print(f"File not found: {file_path}")
             raise HTTPException(status_code=404, detail="File not found")
         
         # 处理文件
@@ -54,6 +56,8 @@ async def process_local_file(request: ProcessLocalFileRequest):
             collection_name=request.collection_name
         )
         
+        print(result)
+
         return result
         
     except Exception as e:

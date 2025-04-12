@@ -140,8 +140,11 @@ def generate_content(
     
     # 查询相关文献
     related_docs = AIService.query_related_documents(document.title, f"user_{user.id}")
-    context = "\n\n".join(related_docs) if related_docs else ""
+    # context = "\n\n".join(related_docs) if related_docs else ""
+    # print(context)
+    context = related_docs
     
+    print(prompt)
     # 生成内容
     content = AIService.generate_content(
         prompt=prompt.get("prompt", ""),
