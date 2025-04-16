@@ -212,11 +212,7 @@ def export_document(
         latex_dir.mkdir(parents=True, exist_ok=True)
 
         # 生成主tex文件
-        main_tex = latex_dir / "main.tex"
-        generate_latex(document.content, main_tex)
-        
-        # 复制模板文件
-        copy_template_files(latex_dir)
+        generate_latex(document, latex_dir)
         
         # 创建zip文件
         zip_path = temp_path / f"{document.title}.zip"
@@ -255,56 +251,202 @@ def generate_pdf(content: dict, output_path: Path):
     except Exception as e:
         raise HTTPException(500, f"PDF生成错误: {str(e)}")
 
-def generate_latex(content: dict, output_path: Path):
-    """生成完整的LaTeX文档"""
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write("\\documentclass{article}\n")
-        f.write("\\usepackage{xeCJK}\n")
-        f.write("\\setCJKmainfont{SimSun}\n")
-        f.write("\\usepackage{geometry}\n")
-        f.write("\\geometry{a4paper, margin=1in}\n")
-        f.write("\\title{我的文档}\n")
-        f.write("\\author{作者}\n")
-        f.write("\\begin{document}\n")
-        f.write("\\maketitle\n")
-        
-        for section in content.get('sections', []):
+# def generate_latex(document, output_dir: Path):
+#     with open(output_dir / "references.bib", 'w', encoding='utf-8') as f:
+#         pass
+
+#     with open(output_dir / "macro.tex", 'w', encoding='utf-8') as f:
+#         f.write(r"""\documentclass[a4paper,zihao=-4,UTF8]{ctexart}
+# \pagestyle{plain}
+# \date{}
+# \usepackage[top=1.0in, bottom=1.0in, left=1.25in, right=1.25in]{geometry} 
+# \setlength{\baselineskip}{20pt}
+# \usepackage{titlesec}
+# \usepackage{zhnumber}
+# \usepackage{abstract}
+# \usepackage{indentfirst}
+# \setlength{\parindent}{2em}
+# \usepackage{color}   % May be necessary if you want to color links
+# \usepackage{hyperref}
+# \hypersetup{
+#     colorlinks=true, %set true if you want colored links
+#     linktoc=all,     %set to all if you want both sections and subsections linked
+#     linkcolor=black,  %choose some color if you want links to stand out
+# }
+# \usepackage{booktabs}
+# \usepackage{multirow}
+# \usepackage{graphicx}
+# \usepackage{enumitem}
+# \usepackage{amsmath,amssymb}
+
+# % numbering restarts at each section
+# \numberwithin{figure}{section}  
+# \numberwithin{table}{section}
+# \numberwithin{equation}{section}
+
+# \usepackage{xcolor,colortbl}
+# \newcommand{\zw}[1]{\textcolor{cyan}{(Zhuowen: #1)}}
+# \usepackage[capitalize]{cleveref}  % Support for easy cross-referencing
+# \crefname{figure}{图}{图}
+# \crefname{table}{表}{表}
+# \crefname{equation}{公式}{公式}
+
+
+# % set font for English
+# \usepackage{fontspec}
+# \setmainfont{Times New Roman}
+# \setsansfont{Arial}
+# \setromanfont{Times New Roman}
+# % the following two are to support combined Chinese and English
+# \newcommand{\hei}[1]{\heiti\sffamily #1}
+# \newcommand{\song}[1]{\songti\rmfamily #1}
+
+
+# % setup style for table of contents
+# \usepackage{titlesec}
+# \usepackage{titletoc}
+# \usepackage{tocloft}
+# \titlecontents{section}[1em]{\zihao{-4}}{\contentslabel{1em}}{\hspace{-1em}}{\titlerule*[0.5pc]{$.$}\contentspage}
+# \titlecontents{subsection}[3em]{\zihao{-4}}{\contentslabel{2em}}{\hspace{-2em}}{\titlerule*[0.5pc]{$.$}\contentspage}
+# \titlecontents{subsubsection}[5em]{\zihao{-4}}{\contentslabel{3em}}{\hspace{-3em}}{\titlerule*[0.5pc]{$.$}\contentspage}
+# \renewcommand{\cfttoctitlefont}{\zihao{2}\heiti}
+# \renewcommand{\contentsname}{\hfill 目~录\hfill}   
+# \renewcommand{\cftaftertoctitle}{\hfill}
+
+# % update references to Chinese style, font size and type can also be set here
+# \usepackage{caption}
+# % uncomment this if you want to use "第一章" instead of "第 1 章"
+# % \renewcommand\thesection{\zhnum{section}}
+# \titleformat{\section}{\centering\hei\zihao{-2}}{第~\thesection~章}{1em}{}[]
+# \titleformat{\subsection}{\hei\zihao{-3}}{\arabic{section}.\arabic{subsection}}{1em}{}[]
+# \titleformat{\subsubsection}{\hei\zihao{4}}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}{1em}{}[]
+# \renewcommand{\abstractnamefont}{\hei\zihao{-2}}
+# \renewcommand{\abstracttextfont}{}
+# % \renewenvironment{abstract}{\begin{center}{\hei\zihao{-2}摘~要}\end{center}\par} \\
+# % \newenvironment{abstract-en}{\begin{center}{\hei\zihao{-2}Abstract}\end{center}\par}
+
+# \renewcommand{\figurename}{图}
+# \renewcommand{\tablename}{表}
+# \renewcommand{\thefigure} {\arabic{section}-\arabic{figure}}
+# \renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+# \renewcommand{\thetable} {\arabic{section}-\arabic{table}}
+# \captionsetup{labelsep=space} 
+
+
+# % title text
+# \newcommand{\mytitle}{""")
+#         f.write(f"{document.title}")
+#         f.write(r"""}
+
+# % header
+# \usepackage{fancyhdr}
+# \pagestyle{fancy}
+# \fancyhead[L]{\kaishu\zihao{-5}\mytitle}
+# \fancyhead[R]{\kaishu\zihao{-5}\leftmark}
+# \renewcommand\headrulewidth{.5pt}
+# \renewcommand\footrulewidth{0pt}
+
+# % for hype-reference of "section*" to work properly
+# \usepackage{xparse}
+# \let\oldsection\section
+# \makeatletter
+# \newcounter{@secnumdepth}
+# \RenewDocumentCommand{\section}{s o m}{%
+#   \IfBooleanTF{#1}
+#     {\setcounter{@secnumdepth}{\value{secnumdepth}}% Store secnumdepth
+#      \setcounter{secnumdepth}{0}% Print only up to \chapter numbers
+#      \oldsection{#3}% \section*
+#      \setcounter{secnumdepth}{\value{@secnumdepth}}}% Restore secnumdepth
+#     {\IfValueTF{#2}% \section
+#        {\oldsection[#2]{#3}}% \section[.]{..}
+#        {\oldsection{#3}}}% \section{..}
+# }
+# \makeatother
+
+# % use GB/T 7714—2015 BibTeX Style
+# \usepackage{gbt7714}
+# \bibliographystyle{gbt7714-numerical}
+# """)
+
+#     with open(output_dir / "main.tex", 'w', encoding='utf-8') as f:
+#         f.write(r"""%% main.tex
+# %% Copyright Zhuowen Yuan
+# %
+# % This work may be distributed and/or modified under the
+# % conditions of the LaTeX Project Public License, either version 1.3
+# % of this license or (at your option) any later version.
+# % The latest version of this license is in
+# %   http://www.latex-project.org/lppl.txt
+# % and version 1.3 or later is part of all distributions of LaTeX
+# % version 2005/12/01 or later.
+# %
+# % This work has the LPPL maintenance status `maintained'.
+# % 
+# % The Current Maintainer of this work is Zhuowen Yuan.
+# %
+# % This work consists of the files main.tex and macro.tex.
+
+# \input{macro}
+
+# \begin{document}
+# \title{\hei\zihao{-2}\mytitle}
+# \maketitle
+# \thispagestyle{empty}
+# \clearpage
+
+
+# \pagenumbering{Roman}
+
+# % important notes: if you find the ToC overflow one page, 
+# % then add the following line before the overflowing section in main text 
+# % \addtocontents{toc}{\protect\newpage\protect}
+# {\pagestyle{plain}
+# \tableofcontents
+# \clearpage}
+
+
+# \pagenumbering{arabic}
+# \setcounter{page}{1}
+# """)
+#         for section in document.content.get('sections', []):
+#             if section['type'] == 'heading1':
+#                 f.write(f"\\section{{{section['content']}}}\n")
+#             elif section['type'] == 'heading2':
+#                 f.write(f"\\subsection{{{section['content']}}}\n")
+#             else:
+#                 f.write(f"{section['content']}\n\n")
+#         f.write(r"""
+# \clearpage
+# \bibliography{references}
+
+
+# \clearpage
+# \section*{致谢}
+# I would like to thank xxx for their advice.
+
+
+# \end{document}
+# """)
+def generate_latex(document, output_dir: Path):
+    with open(output_dir / "macro.tex", 'w', encoding='utf-8') as f:
+        f.write(r"""\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{""")
+        f.write(f"{document.title}")
+        f.write(r"""}
+                
+\begin{document}
+
+\maketitle
+
+""")
+        for section in document.content.get('sections', []):
             if section['type'] == 'heading1':
                 f.write(f"\\section{{{section['content']}}}\n")
             elif section['type'] == 'heading2':
                 f.write(f"\\subsection{{{section['content']}}}\n")
             else:
-                # 处理段落和列表
-                text = section['content'].replace('\n', '\\\\\n')
-                f.write(f"{text}\n\n")
-                
-        f.write("\\end{document}\n")
-
-def copy_template_files(dest_dir: Path):
-    """复制LaTeX模板文件"""
-    # 创建必要的目录结构
-    (dest_dir / 'figures').mkdir(exist_ok=True)
-    
-    # 写入模板文件
-    template_content = r"""% 模板文件
-\documentclass{article}
-\usepackage{xeCJK}
-\setCJKmainfont{SimSun}
-\usepackage{graphicx}
-\usepackage{geometry}
-\geometry{a4paper, margin=1in}
-
-\title{文档标题}
-\author{作者}
-
-\begin{document}
-\maketitle
-
-\section{引言}
-
-这是文档内容。
-
-\end{document}
-"""
-    with open(dest_dir / 'template.tex', 'w', encoding='utf-8') as f:
-        f.write(template_content)
+                f.write(f"{section['content']}\n\n")
+        f.write(r"""
+\end{document}""")
