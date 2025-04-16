@@ -94,8 +94,9 @@ HTTP_BASE=http://127.0.0.1:11451
 3. 确保已安装 Pandoc 以支持 PDF 导出功能
 
 ## 📄 许可证
-MIT License
 
+Unlicense License
+ 
 ---
 
 这个项目将帮助研究人员和学生更高效地撰写学术论文，通过AI技术自动化文献综述的繁琐过程。🎓✨
