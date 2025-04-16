@@ -129,6 +129,18 @@ def generate_content(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user)
 ):
+    
+    if prompt["type"] == "chat":
+        return {
+            "content": AIService.chat_completion(
+                messages=[{
+                    "role": "user",
+                    "content": prompt.get("prompt", "")
+                }]
+            ),
+            "type": "chat"
+        }
+
     # 获取当前文档
     document = db.query(Document).filter(
         Document.id == doc_id,

@@ -4,7 +4,8 @@ from schemas.llm import (
     ChatCompletionRequest,
     ChatCompletionResponse,
     ContentGenerationRequest,
-    ContentGenerationResponse
+    ContentGenerationResponse,
+    Message
 )
 from services.llm import LLMService
 
@@ -12,7 +13,12 @@ router = APIRouter()
 
 @router.post("/chat", response_model=ChatCompletionResponse)
 async def chat_completion(request: ChatCompletionRequest):
-    return LLMService.chat_completion(request.messages)
+    messages = [
+        Message(role="system", content="你是一个乐于助人的AI助手。请用简洁明了的语言回答用户的问题。"),
+    ] + request.messages
+    
+    response = LLMService.chat_completion(messages)
+    return response
 
 @router.post("/chat/stream")
 async def chat_completion_stream(request: ChatCompletionRequest):

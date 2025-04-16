@@ -1,9 +1,26 @@
 import requests
-from typing import Dict, Any
+from typing import Dict, Any, List
 from config import settings
 from fastapi import HTTPException
 
 class AIService:
+    @staticmethod
+    def chat_completion(messages: List[Dict[str, str]]) -> str:
+        try:
+            response = requests.post(
+                f"{settings.ALGO_BASE_URL}/llm/chat",
+                json={
+                    "messages": messages
+                }
+            )
+            response.raise_for_status()
+            return response.json()["choices"][0]["message"]["content"]
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to generate chat response: {str(e)}"
+            )
+
     @staticmethod
     def generate_content(prompt: str, context: str = "") -> str:
         try:
