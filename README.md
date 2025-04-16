@@ -81,7 +81,7 @@ algorithm/
 
 ### 前端环境变量 (.env)
 ```env
-NUXT_UI_PRO_LICENSE=
+NUXT_UI_PRO_LICENSE= 请在这里填入你的 NuxtUIPro 的 License，个人版就行。https://ui.nuxt.com/pro/pricing
 HTTP_BASE=http://127.0.0.1:11451
 ```
 
@@ -96,7 +96,7 @@ HTTP_BASE=http://127.0.0.1:11451
 ## 📄 许可证
 
 Unlicense License
- 
+
 ---
 
 这个项目将帮助研究人员和学生更高效地撰写学术论文，通过AI技术自动化文献综述的繁琐过程。🎓✨
